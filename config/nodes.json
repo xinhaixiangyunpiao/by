@@ -1,0 +1,41 @@
+{
+    "number": 3,
+    "context": [
+        {
+            "id": 0,
+            "name": "node-01",
+            "cpu_core_num": 48,
+            "cpu_type": "I7_6500",
+            "gpu_num": 4,
+            "gpu_type": "GTX_2080Ti",
+            "mem_total": 131072,
+            "video_mem_every": 10240,
+            "cpu_frequency": 2400.0,
+            "gpu_frequency": 400.0
+        },
+        {
+            "id": 1,
+            "name": "node-02",
+            "cpu_core_num": 16,
+            "cpu_type": "I5_8265",
+            "gpu_num": 4,
+            "gpu_type": "GTX_2080Ti",
+            "mem_total": 32768,
+            "video_mem_every": 10240,
+            "cpu_frequency": 2400.0,
+            "gpu_frequency": 400.0
+        },
+        {
+            "id": 2,
+            "name": "node-03",
+            "cpu_core_num": 48,
+            "cpu_type": "I7_6500",
+            "gpu_num": 8,
+            "gpu_type": "Tesla_V100",
+            "mem_total": 131072,
+            "video_mem_every": 32768,
+            "cpu_frequency": 2400.0,
+            "gpu_frequency": 400.0
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+/usr/bin/x86_64-linux-gnu-g++-7   -g   CMakeFiles/main.dir/src/context.cpp.o CMakeFiles/main.dir/src/strategy.cpp.o CMakeFiles/main.dir/src/scheduler.cpp.o CMakeFiles/main.dir/src/util.cpp.o CMakeFiles/main.dir/src/controller.cpp.o CMakeFiles/main.dir/src/webServer.cpp.o  -o main -Wl,-Bstatic -ljsoncpp -Wl,-Bdynamic 

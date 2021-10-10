@@ -1,0 +1,93 @@
+{
+    "number": 1,
+    "context": [
+        {
+            "name": "Car Detect",
+            "task_number": 5,
+            "request_total": 15000,
+            "dag": {
+                "1": [],
+                "2": [
+                    1
+                ],
+                "3": [
+                    1,
+                    2
+                ],
+                "4": [
+                    3
+                ],
+                "5": [
+                    4
+                ]
+            },
+            "tasks": [
+                {
+                    "id": 1,
+                    "name": "data_processing",
+                    "cpu_occ_num": 1,
+                    "gpu_occ_num": 0,
+                    "peak_mem": 2048,
+                    "peak_video_mem": 0,
+                    "cpu_exe_count": 1234567,
+                    "gpu_exe_count": 2345678,
+                    "model_size": 0,
+                    "task_type": "normal",
+                    "code": "def data_processing(image):"
+                },
+                {
+                    "id": 2,
+                    "name": "yolo_v3",
+                    "cpu_occ_num": 1,
+                    "gpu_occ_num": 1,
+                    "peak_mem": 4096,
+                    "peak_video_mem": 0,
+                    "cpu_exe_count": 1234567,
+                    "gpu_exe_count": 2345678,
+                    "model_size": 1024,
+                    "task_type": "long_load_time",
+                    "code": "def yolov3(img):"
+                },
+                {
+                    "id": 3,
+                    "name": "reprocess",
+                    "cpu_occ_num": 1,
+                    "gpu_occ_num": 0,
+                    "peak_mem": 512,
+                    "peak_video_mem": 0,
+                    "cpu_exe_count": 32345,
+                    "gpu_exe_count": 243543,
+                    "model_size": 0,
+                    "task_type": "normal",
+                    "code": "def reprocess(img, table1):"
+                },
+                {
+                    "id": 4,
+                    "name": "update",
+                    "cpu_occ_num": 1,
+                    "gpu_occ_num": 0,
+                    "peak_mem": 512,
+                    "peak_video_mem": 0,
+                    "cpu_exe_count": 3454354,
+                    "gpu_exe_count": 0,
+                    "model_size": 0,
+                    "task_type": "stateful",
+                    "code": "def update(table2, table3, n):"
+                },
+                {
+                    "id": 5,
+                    "name": "cal",
+                    "cpu_occ_num": 1,
+                    "gpu_occ_num": 0,
+                    "peak_mem": 512,
+                    "peak_video_mem": 0,
+                    "cpu_exe_count": 3454354,
+                    "gpu_exe_count": 0,
+                    "model_size": 0,
+                    "task_type": "normal",
+                    "code": "def cal():"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/root/by/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7    -I/root/by/./include  -g   -o CMakeFiles/main.dir/src/context.cpp.o -c /root/by/src/context.cpp",
+  "file": "/root/by/src/context.cpp"
+},
+{
+  "directory": "/root/by/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7    -I/root/by/./include  -g   -o CMakeFiles/main.dir/src/strategy.cpp.o -c /root/by/src/strategy.cpp",
+  "file": "/root/by/src/strategy.cpp"
+},
+{
+  "directory": "/root/by/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7    -I/root/by/./include  -g   -o CMakeFiles/main.dir/src/scheduler.cpp.o -c /root/by/src/scheduler.cpp",
+  "file": "/root/by/src/scheduler.cpp"
+},
+{
+  "directory": "/root/by/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7    -I/root/by/./include  -g   -o CMakeFiles/main.dir/src/util.cpp.o -c /root/by/src/util.cpp",
+  "file": "/root/by/src/util.cpp"
+},
+{
+  "directory": "/root/by/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7    -I/root/by/./include  -g   -o CMakeFiles/main.dir/src/controller.cpp.o -c /root/by/src/controller.cpp",
+  "file": "/root/by/src/controller.cpp"
+},
+{
+  "directory": "/root/by/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7    -I/root/by/./include  -g   -o CMakeFiles/main.dir/src/webServer.cpp.o -c /root/by/src/webServer.cpp",
+  "file": "/root/by/src/webServer.cpp"
+}
+]
