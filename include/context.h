@@ -16,6 +16,9 @@
 /**
  *  Context
  *  Node -> Node -> Node
+ *  Node -> Cpu - Cpu - Cpu
+ *       -> Gpu - Gpu - Gpu
+ *       -> Memory
  *  App -> App -> App
  *  App -> TaskInfo
  *            |
@@ -85,7 +88,7 @@ typedef struct Node{
     GpuInfo* gpu_struct;               // GPU首节点
     uint16_t tasks_num;                // 在node上部署或运行的task的总数
     std::unordered_map<std::pair<uint16_t, uint16_t>, std::vector<Task*>, pair_hash>* tasks_entry; // Task描述符表,使用app_id和task_info_id做索引
-    Node* next;                      // 下一个Node节点
+    Node* next;                        // 下一个Node节点
 } Node;
 
 typedef struct Task{
