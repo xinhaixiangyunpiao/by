@@ -32,6 +32,7 @@ void Strategy::decide(){
         }
         app = app->next;
     }
+
     // 触发一次调度
     if(scheduler == nullptr)
         return;

@@ -9,7 +9,7 @@
             "gpu_num": 4,
             "gpu_type": "GTX_2080Ti",
             "mem_total": 131072,
-            "video_mem_every": 10240,
+            "gpu_mem_every": 10240,
             "mem_for_cpu_deploy_percent": 0.1,
             "mem_for_gpu_deploy_precent": 0.1
         },
@@ -21,7 +21,7 @@
             "gpu_num": 4,
             "gpu_type": "GTX_2080Ti",
             "mem_total": 32768,
-            "video_mem_every": 10240,
+            "gpu_mem_every": 10240,
             "mem_for_cpu_deploy_percent": 0.1,
             "mem_for_gpu_deploy_precent": 0.1
         },
@@ -33,7 +33,7 @@
             "gpu_num": 8,
             "gpu_type": "Tesla_V100",
             "mem_total": 131072,
-            "video_mem_every": 32768,
+            "gpu_mem_every": 32768,
             "mem_for_cpu_deploy_percent": 0.1,
             "mem_for_gpu_deploy_precent": 0.1
         }

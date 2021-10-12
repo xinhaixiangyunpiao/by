@@ -41,6 +41,10 @@ strategy.h
 .././include/strategy.h
 queue
 -
+algorithm
+-
+cfloat
+-
 
 .././include/strategy.h
 context.h

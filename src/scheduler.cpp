@@ -27,14 +27,7 @@ bool Scheduler::isReady(TaskNode& taskNode){
 
 bool Scheduler::isSatified(Node* node, Task* task){
     // CPU核数，GPU个数，内存足够
-    TaskInfo* taskInfo = task->task_info_ptr;
-    if(taskInfo->cpu_occ_num > node->cpu_core_avail)
-        return false;
-    if(taskInfo->gpu_occ_num > node->gpu_num_avail)
-        return false;
-    if(taskInfo->peak_mem > node->mem_avail)
-        return false;
-    return true;
+    return false;
 }
 
 double Scheduler::calEST(Node* node, Task* task){
@@ -48,7 +41,7 @@ double Scheduler::calEST(Node* node, Task* task){
     // 数据就位时间（上一节点的输入数据以及状态表的传输时间）
     
     // 取最小值
-    
+    return 123;
 }
 
 double Scheduler::calEFT(Node* node, Task* task){
@@ -60,6 +53,8 @@ double Scheduler::calEFT(Node* node, Task* task){
     // 加权求得实际预测运行时间
 
     // 与EST相加返回
+
+    return 456;
 
 }
 
@@ -75,7 +70,7 @@ void Scheduler::dispatch(){
             q.pop_front();
         }
     }
-    // 将ready队列队顶元素取出，
+    // 将ready队列队顶元素取出，判断最早完成的节点并分配
     if(readyQ.size() != 0){
         TaskNode targetTask = readyQ.top();
         // 生成放在每个Node上的执行计划判断时间，选取。
@@ -96,10 +91,9 @@ void Scheduler::dispatch(){
         // 修改task的状态，分发任务到节点。
         if(targetNodeId == -1)
             return ;
-        
         // 将节点从队列移除。
-        
     }
+
 }
 
 int Scheduler::getReadyQueueSize(){

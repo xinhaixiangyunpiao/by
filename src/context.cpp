@@ -15,17 +15,18 @@ void Context::app_dag_build(std::vector<std::vector<uint16_t>>* dag, Json::Value
 
 void Context::head_taskInfo_build(App* app, TaskInfo* taskInfo){
     taskInfo->task_info_id = 0;
-    taskInfo->cpu_occ_num = 1;
-    taskInfo->gpu_occ_num = 0;
-    taskInfo->peak_mem = 0;
-    taskInfo->peak_video_mem = 0;
-    taskInfo->cpu_exe_count = 0;
-    taskInfo->gpu_exe_count = 0;
-    taskInfo->modle_size = 0;
+    taskInfo->demond_cpus_num = 1;
+    taskInfo->demond_gpus_num = 0;
+    taskInfo->demond_deploy_memory = 0;
+    taskInfo->demond_deploy_gpu_memory = 0;
+    taskInfo->demond_run_memory = 0;
+    taskInfo->demond_run_gpu_memory = 0;
+    taskInfo->input_data_size = 0;
     taskInfo->task_type = START_OR_END_TASK;
     taskInfo->code = nullptr;
     taskInfo->tasks_entry = new std::unordered_map<uint16_t, Task*>();
-    taskInfo->predict_execute_time = nullptr;
+    taskInfo->predict_deploy_time = nullptr;
+    taskInfo->predict_run_time = nullptr;
     taskInfo->request_has_gen = 0;
     taskInfo->task_struct = nullptr;
     taskInfo->app_ptr = app;
@@ -34,17 +35,18 @@ void Context::head_taskInfo_build(App* app, TaskInfo* taskInfo){
 
 void Context::tail_taskInfo_build(App* app, TaskInfo* taskInfo, uint16_t n){
     taskInfo->task_info_id = n;
-    taskInfo->cpu_occ_num = 1;
-    taskInfo->gpu_occ_num = 0;
-    taskInfo->peak_mem = 0;
-    taskInfo->peak_video_mem = 0;
-    taskInfo->cpu_exe_count = 0;
-    taskInfo->gpu_exe_count = 0;
-    taskInfo->modle_size = 0;
+    taskInfo->demond_cpus_num = 1;
+    taskInfo->demond_gpus_num = 0;
+    taskInfo->demond_deploy_memory = 0;
+    taskInfo->demond_deploy_gpu_memory = 0;
+    taskInfo->demond_run_memory = 0;
+    taskInfo->demond_run_gpu_memory = 0;
+    taskInfo->input_data_size = 0;
     taskInfo->task_type = START_OR_END_TASK;
     taskInfo->code = nullptr;
     taskInfo->tasks_entry = new std::unordered_map<uint16_t, Task*>();
-    taskInfo->predict_execute_time = nullptr;
+    taskInfo->predict_deploy_time = nullptr;
+    taskInfo->predict_run_time = nullptr;
     taskInfo->request_has_gen = 0;
     taskInfo->task_struct = nullptr;
     taskInfo->app_ptr = app;
@@ -68,17 +70,39 @@ Context::Context(){  // 新建taskInfo和Node结构体，建立索引。
         Node* pre = head;
         for(int i = 0; i < n; i++){
             Node* node = new Node();
+            float mem_for_cpu_deploy_percent = nodes[i]["mem_for_cpu_deploy_percent"].asFloat();
+            float mem_for_gpu_deploy_percent = nodes[i]["mem_for_gpu_deploy_percent"].asFloat();
             node->node_id = nodes[i]["id"].asInt();
-            node->cpu_core_total = nodes[i]["cpu_core_num"].asInt();
-            node->cpu_type = util::convert(nodes[i]["cpu_type"].asString());
-            node->gpu_num = nodes[i]["gpu_num"].asInt();
-            node->gpu_type = util::convert(nodes[i]["gpu_type"].asString());
-            node->mem_total = nodes[i]["mem_total"].asInt();
-            node->mem_video_every = nodes[i]["video_mem_every"].asInt();
-            node->cpu_frequency = nodes[i]["cpu_frequency"].asInt();
-            node->gpu_frequency = nodes[i]["gpu_frequency"].asFloat();
-            node->cpu_core_avail = node->cpu_core_total;
-            node->gpu_num_avail = node->gpu_num;
+            node->cpus_num = 1;
+            node->gpus_num = nodes[i]["gpu_num"].asInt();
+            (node->memory).mem_total = nodes[i]["mem_total"].asInt();
+            (node->memory).mem_for_deploy = (node->memory).mem_total*mem_for_cpu_deploy_percent;
+            (node->memory).mem_for_run = (node->memory).mem_total - (node->memory).mem_for_deploy;
+            (node->memory).mem_avail = (node->memory).mem_total;
+            (node->memory).mem_for_deploy_avail = (node->memory).mem_for_deploy;
+            (node->memory).mem_for_run_avail = (node->memory).mem_for_run_avail;
+            CpuInfo* cpu = new CpuInfo();
+            cpu->type = util::convert(nodes[i]["cpu_type"].asString());
+            cpu->cores_num = nodes[i]["cpu_core_num"].asInt();
+            cpu->cores_avail = cpu->cores_num;
+            cpu->next = nullptr;
+            node->cpu_struct = cpu;
+            GpuInfo* gpu_dummy = new GpuInfo();
+            GpuInfo* gpu_cur = gpu_dummy;
+            for(int i = 0; i < node->gpus_num; i++){
+                GpuInfo* gpu = new GpuInfo();
+                gpu->type = util::convert(nodes[i]["gpu_type"].asString());
+                (gpu->memory).mem_total = nodes[i]["gpu_mem_every"].asInt();
+                (gpu->memory).mem_for_deploy = (gpu->memory).mem_total*mem_for_gpu_deploy_percent;
+                (gpu->memory).mem_for_run = (gpu->memory).mem_total - (gpu->memory).mem_for_deploy;
+                (gpu->memory).mem_avail = (gpu->memory).mem_total;
+                (gpu->memory).mem_for_deploy_avail = (gpu->memory).mem_for_deploy;
+                (gpu->memory).mem_for_run_avail = (gpu->memory).mem_for_run_avail;
+                gpu_cur->next = gpu;
+                gpu_cur = gpu_cur->next;
+            }
+            gpu_cur->next = nullptr;
+            node->gpu_struct = gpu_dummy->next;
             node->tasks_num = 0;
             node->tasks_entry = nullptr;
             pre->next = node;
@@ -125,20 +149,20 @@ Context::Context(){  // 新建taskInfo和Node结构体，建立索引。
                 TaskInfo* taskInfo = new TaskInfo();
                 taskInfo_id = tasks[i]["id"].asInt();
                 taskInfo->task_info_id = taskInfo_id;
-                taskInfo->cpu_occ_num = tasks[i]["cpu_occ_num"].asInt();
-                taskInfo->gpu_occ_num = tasks[i]["gpu_occ_num"].asInt();
-                taskInfo->peak_mem = tasks[i]["peak_mem"].asInt();
-                taskInfo->peak_video_mem = tasks[i]["peak_video_mem"].asInt();
-                taskInfo->cpu_exe_count = tasks[i]["cpu_exe_count"].asInt();
-                taskInfo->gpu_exe_count = tasks[i]["gpu_exe_count"].asInt();
-                taskInfo->modle_size = tasks[i]["model_size"].asInt();
+                taskInfo->demond_cpus_num = tasks[i]["cpu_cores_num"].asInt();
+                taskInfo->demond_gpus_num = tasks[i]["gpus_num"].asInt();
+                taskInfo->demond_deploy_memory = tasks[i]["deploy_peak_mem"].asInt();
+                taskInfo->demond_deploy_gpu_memory = tasks[i]["deploy_peak_gpu_mem"].asInt();
+                taskInfo->demond_run_memory = tasks[i]["run_peak_mem"].asInt();
+                taskInfo->demond_run_gpu_memory = tasks[i]["run_peak_gpu_mem"].asInt();
                 taskInfo->task_type = util::convert(tasks[i]["task_type"].asString());
                 Code* code = new Code();
                 code->context = (char*)tasks[i]["code"].asString().data();
                 code->code_len = strlen(code->context);
                 taskInfo->code = code;
                 taskInfo->tasks_entry = new std::unordered_map<uint16_t, Task*>();
-                taskInfo->predict_execute_time = nullptr;
+                taskInfo->predict_deploy_time = new std::unordered_map<uint16_t, double>();
+                taskInfo->predict_run_time = new std::unordered_map<uint16_t, double>();
                 taskInfo->request_has_gen = 0;
                 taskInfo->task_struct = nullptr;
                 taskInfo->app_ptr = app;
@@ -187,46 +211,6 @@ Context::~Context(){ // 释放内存
 
 }
 
-void Context::debug(){
-    std::cout << "node num: " << nodes_entry.size() << std::endl;
-    Node* p = node_struct;
-    while(p){
-        std::cout << "   id: " << p->node_id << std::endl;
-        p = p->next;
-    }
-    std::cout << "app num: " << apps_entry.size() << std::endl;
-    App* q = app_struct;
-    while(q){
-        std::cout << "   id: " << q->app_id << std::endl;
-        std::cout << "   DAG: " << q->app_id << std::endl;
-        int num = 0;
-        for(auto i : *(q->dag)){
-            std::cout << "      " << num << ": ";
-            for(auto j : i){
-                std::cout << j << " ";
-            }
-            std:: cout << std::endl;
-            num++;
-        }
-        std::cout << "   tasks: " << std::endl;
-        TaskInfo* p = q->task_info_struct;
-        while(p){
-            std::cout << "      id: " << p->task_info_id << std::endl;
-            p = p->next;
-        }
-        q = q->next;
-    }
-    std::cout << "bindWidth: " << std::endl;
-    for(auto i : bindWidth){
-        std::cout << "   ";
-        for(auto j : i){
-            std::cout << j << " ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "history record num: " << history_execute_record.size() << std::endl;
-}
-
 void Context::bind(Strategy* strategy){
     this->strategy = strategy;
 }
@@ -246,12 +230,13 @@ void Context::updateContext(Event* event){
         if(taskInfo->task_info_id == 0)
             task->input_data_size = data_len;
         else
-            task->input_data_size = 0;
+            task->input_data_size = taskInfo->input_data_size;
         task->node_id = node_id;
         task->task_status = UNDEPLOYED;
+        task->timestamp_deplay_start = 0;
         task->timestamp_run_start = 0;
-        task->predict_execute_timestamp = 0;
-        task->actully_execute_timestamp = 0;
+        task->timestamp_deploy_end = 0;
+        task->timestamp_run_end = 0;
         task->task_info_ptr = taskInfo;
         if(taskInfo->task_info_id == 0){
             Data* data = new Data();

@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <cfloat>
 
+struct Node;
+struct Task;
 struct TaskNode;
 
 class Context;
