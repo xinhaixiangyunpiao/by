@@ -10,8 +10,8 @@
             "gpu_type": "GTX_2080Ti",
             "mem_total": 131072,
             "video_mem_every": 10240,
-            "cpu_frequency": 2400.0,
-            "gpu_frequency": 400.0
+            "mem_for_cpu_deploy_percent": 0.1,
+            "mem_for_gpu_deploy_precent": 0.1
         },
         {
             "id": 1,
@@ -22,8 +22,8 @@
             "gpu_type": "GTX_2080Ti",
             "mem_total": 32768,
             "video_mem_every": 10240,
-            "cpu_frequency": 2400.0,
-            "gpu_frequency": 400.0
+            "mem_for_cpu_deploy_percent": 0.1,
+            "mem_for_gpu_deploy_precent": 0.1
         },
         {
             "id": 2,
@@ -34,8 +34,8 @@
             "gpu_type": "Tesla_V100",
             "mem_total": 131072,
             "video_mem_every": 32768,
-            "cpu_frequency": 2400.0,
-            "gpu_frequency": 400.0
+            "mem_for_cpu_deploy_percent": 0.1,
+            "mem_for_gpu_deploy_precent": 0.1
         }
     ]
 }

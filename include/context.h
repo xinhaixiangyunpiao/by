@@ -58,9 +58,6 @@ typedef struct Node{
     uint8_t gpu_type;                // gpu的型号
     uint16_t mem_total;              // 总内存数
     uint16_t mem_video_every;        // 每张卡的显存大小
-    float cpu_frequency;             // cpu主频
-    float gpu_frequency;             // gpu主频
-    uint16_t cpu_core_avail;         // 空闲的cpu逻辑核的数量
     uint16_t gpu_num_avail;          // 空闲的gpu数量
     uint16_t mem_avail;              // 当前可用内存大小
     uint16_t tasks_num;              // 在node上运行的task的总数
